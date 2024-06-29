@@ -24,7 +24,7 @@ ifeq ($(OS), Windows_NT)
 	# Set Windows macros
 	platform := Windows
 	CXX ?= g++
-	linkFlags += -Wl,--allow-multiple-definition -pthread -lopengl32 -lgdi32 -lwinmm -mwindows -static -static-libgcc -static-libstdc++
+	linkFlags += -Wl,--subsystem,console -g -pthread -lopengl32 -lgdi32 -lwinmm -mwindows -static -static-libgcc -static-libstdc++
 	THEN := &&
 	PATHSEP := \$(BLANK)
 	MKDIR := -mkdir -p
