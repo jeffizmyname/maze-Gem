@@ -13,7 +13,7 @@
 // Initialization
 int screenWidth = 800 * 2;
 int screenHeight = 450 * 2;
-int mazeSize = 4;
+int mazeSize = 5;
 int cellSize = 100;
 
 void DrawOutline(int x, int y, int w, int h, int thickness, Color outline, Color inside)
