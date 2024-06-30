@@ -23,5 +23,6 @@ public:
     bool compare(std::vector<int>& v1, std::vector<int>& v2);
     void addValueIfNotPresent(std::vector<int>& vec, int value);
     bool areEqual(const std::vector<int>& vec1, const std::vector<int>& vec2);
+    bool isFull();
 
 };
