@@ -19,8 +19,11 @@ void Maze::generate()
     int currRow = height - 1;
     int currCol = 0;
     int lastCell = 0;
+    int historyPointer = 0;
+    bool fillerDone = false;
     std::vector<int> checkDirections;
     std::vector<int> dirTemplate = {1, 2, 3, 4};
+    std::vector<std::vector<int>> history = {};
 
     while (true)
     {
@@ -42,6 +45,8 @@ void Maze::generate()
             {
                 maze[currRow][currCol].push_back(randomDirection);
                 lastCell = randomDirection;
+                history.push_back({currRow, currCol});
+                fillerDone = false;
                 currRow--;
                 checkDirections.clear();
             }
@@ -56,6 +61,8 @@ void Maze::generate()
             {
                 maze[currRow][currCol].push_back(randomDirection);
                 lastCell = randomDirection;
+                history.push_back({currRow, currCol});
+                fillerDone = false;
                 currCol++;
                 checkDirections.clear();
             }
@@ -70,6 +77,8 @@ void Maze::generate()
             {
                 maze[currRow][currCol].push_back(randomDirection);
                 lastCell = randomDirection;
+                history.push_back({currRow, currCol});
+                fillerDone = false;
                 currRow++;
                 checkDirections.clear();
             }
@@ -84,6 +93,8 @@ void Maze::generate()
             {
                 maze[currRow][currCol].push_back(randomDirection);
                 lastCell = randomDirection;
+                history.push_back({currRow, currCol});
+                fillerDone = false;
                 currCol--;
                 checkDirections.clear();
             }
@@ -112,26 +123,66 @@ void Maze::generate()
 
         if (compare(checkDirections, dirTemplate))
         {
-            int last = 0;
-            switch (lastCell)
+            std::cout << "dead end" << std::endl;
+
+            history.pop_back();
+            std::vector<int> lastPos = history.back();
+
+            //! jak cofło pozycje to sie to nie moze juz wykonywac
+            std::cout << "1 " << fillerDone << std::endl;
+            if (fillerDone == false)
             {
-            case 1:
-                last = 3;
-                break;
-            case 2:
-                last = 4;
-                break;
-            case 3:
-                last = 1;
-                break;
-            case 4:
-                last = 2;
-                break;
-            default:
+                std::cout << "2" << std::endl;
+                int last = 0;
+                switch (lastCell)
+                {
+                case 1:
+                    last = 3;
+                    fillerDone = true;
+                    break;
+                case 2:
+                    last = 4;
+                    fillerDone = true;
+                    break;
+                case 3:
+                    last = 1;
+                    fillerDone = true;
+                    break;
+                case 4:
+                    last = 2;
+                    fillerDone = true;
+                    break;
+                default:
+                    break;
+                }
+                maze[currRow][currCol].push_back(last);
+                std::cout << "3" << std::endl;
+            }
+            std::cout << "4" << std::endl;
+            //! last pos sie sra o coś i nie działa
+            std::cout << history.back()[0] << " " << history.back()[0] << std::endl;
+            for (int i = 0; i < history.size(); i++)
+            {
+                std::cout << "5 " << history[i][0] << " " << history[i][1] << std::endl;
+            }
+            
+            //std::cout << "4 " << lastPos[0] << " " << lastPos[1] << std::endl;
+
+            currRow = lastPos[0];
+            currCol = lastPos[1];
+            std::cout << "5" << std::endl;
+
+            for (int dir : lastPos)
+            {
+                std::cout << dir << " ";
+            }
+            std::cout << std::endl;
+
+            if (isFull())
+            {
+                std::cout << "its full" << std::endl;
                 break;
             }
-            maze[currRow][currCol].push_back(last);
-            break;
         }
     }
 }
@@ -150,9 +201,12 @@ void Maze::displayMaze()
             std::cout << "{";
             for (size_t k = 0; k < maze[i][j].size(); ++k)
             { // iterate over layers
-                if(maze[i][j].size() == 0) {
+                if (maze[i][j].size() == 0)
+                {
                     std::cout << "0";
-                } else {
+                }
+                else
+                {
                     std::cout << maze[i][j][k];
                 }
                 if (k != maze[i][j].size() - 1)
@@ -212,11 +266,24 @@ void Maze::addValueIfNotPresent(std::vector<int> &vec, int value)
     }
 }
 
+bool Maze::isFull()
+{
+    for (int i = 0; i < maze.size(); ++i)
+    {
+        for (int j = 0; j < maze[0].size(); ++j)
+        {
+            if (maze[i][j].empty())
+                return false;
+        }
+    }
+    return true;
+}
 
 //----------------------------------//
 //     The not important stuff      //
 //----------------------------------//
 
-std::vector<std::vector<std::vector<int>>> Maze::getMaze() {
+std::vector<std::vector<std::vector<int>>> Maze::getMaze()
+{
     return maze;
 }
